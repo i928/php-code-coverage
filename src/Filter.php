@@ -22,6 +22,14 @@ class Filter
      */
     private $whitelistedFiles = [];
 
+    private $ignoreLists = [];
+
+    /**
+     * @param array $ignoreLists
+     */
+    public function setIgnoreLists($ignoreLists) {
+        $this->ignoreLists = $ignoreLists;
+    }
     /**
      * Adds a directory to the whitelist (recursively).
      *
@@ -127,8 +135,17 @@ class Filter
         }
 
         $filename = realpath($filename);
-
+        if (empty($this->whitelistedFiles)){
+            foreach($this->ignoreLists as $ignorePattern ){
+                $pattern = '/'.$ignorePattern.'/';
+                if (preg_match($pattern, $filename)){
+                    return true;
+                }
+            }
+            return false;
+        } else{
         return !isset($this->whitelistedFiles[$filename]);
+        }
     }
 
     /**
