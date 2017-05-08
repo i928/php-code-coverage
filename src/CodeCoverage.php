@@ -306,7 +306,7 @@ class CodeCoverage
 
         $this->currentId = null;
 
-        return $data;
+        return $this->data;
     }
 
     /**
